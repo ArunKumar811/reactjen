@@ -1,0 +1,54 @@
+import React, { useState, useEffect } from "react";
+
+function SimpleCRUD() {
+  const [items, setItems] = useState(() => JSON.parse(localStorage.getItem("items")) || []);
+  const [input, setInput] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem("items", JSON.stringify(items));
+  }, [items]);
+
+  const addItem = () => {
+    if (input.trim()) {
+      setItems([...items, input]);
+      setInput("");
+    }
+  };
+
+  const deleteItem = (index) => {
+    setItems(items.filter((_, i) => i !== index));
+  };
+
+  const updateItem = (index) => {
+    const newValue = prompt("Enter new value:", items[index]);
+    if (newValue) {
+      const updated = [...items];
+      updated[index] = newValue;
+      setItems(updated);
+    }
+  };
+
+  return (
+    <div style={{ padding: 20 }}>
+      <h2>Simple CRUD (Local Storage)</h2>
+      <input
+        type="text"
+        placeholder="Enter item"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <button onClick={addItem}>Add</button>
+      <ul>
+        {items.map((item, i) => (
+          <li key={i}>
+            {item}{" "}
+            <button onClick={() => updateItem(i)}>Edit</button>{" "}
+            <button onClick={() => deleteItem(i)}>Delete</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default SimpleCRUD;
