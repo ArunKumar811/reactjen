@@ -1,0 +1,59 @@
+import React, { useState } from "react";
+
+function FormValidation() {
+  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    let newErrors = {};
+    if (!formData.name) newErrors.name = "Name is required";
+    if (!formData.email.includes("@")) newErrors.email = "Valid email required";
+    if (formData.password.length < 6) newErrors.password = "Password must be at least 6 characters";
+    return newErrors;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length === 0) {
+      alert("Form submitted successfully!");
+    } else {
+      setErrors(validationErrors);
+    }
+  };
+
+  return (
+    <div style={{ padding: 20 }}>
+      <h2>Form Validation Example</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Enter Name"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        />
+        <p style={{ color: "red" }}>{errors.name}</p>
+
+        <input
+          type="email"
+          placeholder="Enter Email"
+          value={formData.email}
+          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        />
+        <p style={{ color: "red" }}>{errors.email}</p>
+
+        <input
+          type="password"
+          placeholder="Enter Password"
+          value={formData.password}
+          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+        />
+        <p style={{ color: "red" }}>{errors.password}</p>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
+}
+
+export default FormValidation;
